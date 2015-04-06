@@ -11,23 +11,26 @@ module Spree
 			def create
 				@user = Spree::User.find(params["user_id"])
 				if @user
-
-					@food = Survey::Food.find(food_params[:id])
-					if @food
-						@user.foods << @food
-						@user.save
-						@status = [ { "messages" => "Add Food Suvery to User Successful"}]
-						render "spree/api/logger/log", status: 200
-					else
-						invalid_resource!(@food)
+					Survey::UserFood.transaction do
+						food_params[:ids].split(',').each do |id|
+							@food = Survey::Food.find(id)
+							if @food
+								@user.foods << @food
+								@user.save
+							else
+								invalid_resource!(@food)
+							end
+						end
 					end
+					@status = [ { "messages" => "Add Food Suvery to User Successful"}]
+					render "spree/api/logger/log", status: 200
 				end
 			end
 
 			private
 
 			def food_params
-				params.require(:food).permit(:id)
+				params.require(:food).permit(:ids)
 			end
 
 			def user_id
