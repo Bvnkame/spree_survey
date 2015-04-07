@@ -8,5 +8,5 @@ Spree::Core::Engine.routes.draw do
     end
   end
 
-  post '/api/users/:id/survey', to: 'api/surveys#create'
+  post '/api/survey', to: 'api/surveys#create'
 end
