@@ -1,6 +1,8 @@
 module Spree
 	module Api
 		class FoodsController  < BaseApiController
+			before_action :authenticate_user, :except => [:index]
+
 			def index
 				if params[:ids]
 					@foods =  Survey::Food.accessible_by(current_ability, :read).where(id: params[:ids].split(','))
