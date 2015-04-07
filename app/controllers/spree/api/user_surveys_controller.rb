@@ -11,18 +11,35 @@ module Spree
 			def create
 				@user = Spree::User.find(params["user_id"])
 				if @user
-					@user_survey = Survey::UserSurvey.new(user_survey_params)
-					@user_survey.user_id = @user.id
-					@user_survey.save
-					@status = [ { "messages" => "Add User Survey Successful"}]
+					Survey::UserFood.transaction do
+						Survey::UserSurvey.save_info(@user, user_survey_params[:quantity], user_survey_params[:something])
+
+						user_survey_params[:like_food_ids].split(',').each do |id|
+							@food = Survey::Food.find(id)
+							if @food
+								@food.save_like @user
+							else
+								invalid_resource!(@food)
+							end
+						end
+
+						user_survey_params[:unlike_food_ids].split(',').each do |id|
+							@food = Survey::Food.find(id)
+							if @food
+								@food.save_unlike @user
+							else
+								invalid_resource!(@food)
+							end
+						end
+					end
+					@status = [ { "messages" => "Add Survey for User Successful"}]
 					render "spree/api/logger/log", status: 200
 				end
 			end
 
 			private
-
 			def user_survey_params
-				params.require(:user_survey).permit(:quantity, :something)
+				params.require(:user_survey).permit(:quantity, :like_food_ids, :unlike_food_ids, :something)
 			end
 
 			def user_id

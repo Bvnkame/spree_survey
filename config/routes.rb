@@ -6,7 +6,7 @@ Spree::Core::Engine.routes.draw do
       resources :foods, controller: 'user_foods'
       resources :surveys, controller: 'user_surveys'
     end
-
-
   end
+
+  post '/api/users/:id/survey', to: 'api/surveys#create'
 end
