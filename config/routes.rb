@@ -8,6 +8,8 @@ Spree::Core::Engine.routes.draw do
     end
   end
 
+  get '/api/enter_customer_info', to: 'api/surveys#show'
   post '/api/enter_customer_info', to: 'api/surveys#create'
   put '/api/enter_customer_info', to: 'api/surveys#update'
+
 end

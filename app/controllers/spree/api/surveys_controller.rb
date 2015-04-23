@@ -37,6 +37,17 @@ module Spree
 				render "spree/api/logger/log", status: 200
 			end
 
+
+			def show
+				@order = Spree::Order.find_by!(number: params[:order_number])
+				 p "djfaksd"
+				 p @order
+				authorize! :update, @order
+
+				render "spree/api/enter_informations/show"
+
+			end
+
 			def update
 
 				@order = Spree::Order.find_by!(number: params[:cart_number])
@@ -88,15 +99,6 @@ module Spree
 
 			def payment_params
 				params.require(:payment).permit(:type)
-			end
-
-			def total_price_order(order)
-				total_price = 0
-				order.line_items.each do |line_item|
-					p line_item
-					total_price += line_item.price.to_f * line_item.quantity.to_f
-				end
-				total_price
 			end
 		end
 	end

@@ -4,6 +4,8 @@ module Survey
 		has_many :users, through: :user_foods, :class_name => "Spree::User"
 		has_many :user_foods, :class_name => "Survey::UserFood", foreign_key: 'user_id'
 
+		has_many :orders, through: :user_foods, :class_name => "Spree::Order"
+		has_many :user_foods, :class_name => "Survey::UserFood", foreign_key: 'order_id'
 
 		def save_like(user, order_id)
 			user.foods << self
