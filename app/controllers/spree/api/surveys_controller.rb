@@ -31,6 +31,7 @@ module Spree
 					end
 
 					#PAYMENT
+					Spree::Payment.where(:order_id => @order.id).destroy_all
 					Spree::Payment.create(:order_id => @order.id, :payment_type => payment_params[:type], :is_pay => false)
 				end
 				@status = [ { "messages" => "Add Enter Information for User Successful"}]
