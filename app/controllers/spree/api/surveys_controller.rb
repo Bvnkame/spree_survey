@@ -8,7 +8,6 @@ module Spree
 					@time_delivery = Add::TimeDelivery.find(params[:time_delivery_id])
 
 					address = Spree::Address.create(address_params)
-					address.user_id = current_api_user.id
 					address.save!
 
 					@order = Spree::Order.find_by!(number: params[:cart_number])
